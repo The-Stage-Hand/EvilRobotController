@@ -7,11 +7,12 @@ using UnityEngine.EventSystems;
 public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
 	
-	public float offset = 1.1f;
+	public float offset = -200f;
 	public static StackBlock root;
 	public  StackBlock above;
 	public  StackBlock below;
-
+	private GameObject block;
+	public Material materialred,materialgreen;
 	private bool dragging;
 	private Vector3 dragoffset;
 	public float sensitivity = 1f;
@@ -30,6 +31,8 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	// Use this for initialization
 	private void Awake()
 	{
+		block = gameObject.transform.GetChild(0).gameObject;
+		block.GetComponent<Renderer>().material = materialred;
 		print("stackawake");
 		if (root == null)
 		{
@@ -46,6 +49,10 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			transform.position = above.transform.position - new Vector3(0, offset, 0);
 		}
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			LinkStep();
+		}
 		
 	}
 
@@ -53,7 +60,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
     {
 		print("mousedownonme");
 		dragging = true;
-		Detach();
+		if (above != null || below != null) Detach();
 		Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		mouseworld.z = transform.position.z;
 		dragoffset = transform.position - mouseworld;	
@@ -63,7 +70,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		if (!dragging) { return; }
         Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseworld.z = transform.position.z;
-		transform.position = mouseworld * sensitivity + dragoffset; 
+		transform.position = mouseworld* sensitivity + dragoffset; 
     }
 	public void OnPointerUp(PointerEventData eventdata)
 	{
@@ -77,19 +84,15 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	{
 	    publictarget = target;
 		print("stacking at " + target);
-		if (target == null) return;
-		if (target == this)
-		{
-			print("target is myself not TryStack");
-			return;
-		}
-		if (target.above == null && target != root) return;
-
+		if (target == null || target == this) return;
 		Detach();
 		above = target;
 		below = target.below;
-		if (target.below != null) target.below.above = this;
+		if (target.below != null)
+			target.below.above = this;
 		target.below = this;
+
+		RootAgain();
 		print("stacked");
 	}
 	public void Detach()
@@ -97,15 +100,22 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		print("deataching");
 		if (above !=null) above.below = below;
 		if (below != null) below.above = above;
+		
+		if (root == this)
+		{
+			root = below;
+			if (root != null)
+				root.above = null;
+		}
 		above = null;
 		below = null;
-		//if (root ==  this) root = null;
+		RootAgain();
 	}
 	StackBlock FindSnapTarget()
 	{
 		print("finding snap target");
 		StackBlock[] blocks = FindObjectsOfType<StackBlock>();
-		float mindist = 1.2f;
+		float mindist = 200f;
 		StackBlock best = null;
 		foreach (StackBlock b in blocks)
 		{
@@ -117,12 +127,123 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			float d = Vector3.Distance(transform.position, b.transform.position);
 			if (d < mindist)
 			{
+				print((int)d + " distance + best is:  " + b);
 				mindist = d;
 				best = b;
 			}
+			print("FOREACH ITERATION");
 		}
+		print("found somethign  " + best);
 		print(blocks.Length + "\t" + blocks);
 		print("best: " + best);
 		return best;
 	}
+	static void RootAgain()
+	{
+		StackBlock[] blocks = FindObjectsOfType<StackBlock>();
+		root = null;
+		foreach (var b in blocks)
+		{ if (b.above == null)
+			{
+				root = b;
+				break;
+			}
+		}
+	}
+
+    void LinkStep()
+	{
+		StopAllCoroutines();
+		ResetVisual();
+		StartCoroutine(RunStack());
+	}
+
+
+    //void LinkStep()
+    //{
+    //	if (root == null)
+    //	{
+    //		Debug.LogWarning("no root to execute");
+    //		return;
+    //	}
+    //	StackBlock current = root;
+    //	while (current != null)
+    //	{
+    //		current.Execute();
+    //		current = current.below;
+    //	}
+    //}
+    void Execute()
+	{
+		Debug.Log("executing"); // place execution code here
+		block.GetComponent<Renderer>().material = materialgreen;
+	}
+
+
+	IEnumerator RunStack()
+	{ 
+		if (root == null) yield break;
+	
+		StackBlock current = root;
+		
+		while (current != null)
+		{
+			current.Execute();
+			yield return new WaitForSeconds(0.3f);
+			current = current.below;
+		}
+	
+	
+	}
+	void ResetVisual()
+	{
+		foreach(var b in FindObjectsOfType<StackBlock>())
+		{
+			b.block.GetComponent<Renderer>().material = materialred;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        void LateUpdate()
+	{
+		if (root != null && root.above != null)
+			Debug.LogError("root state bad");
+
+		int tops = 0;
+		foreach (var b in FindObjectsOfType<StackBlock>())
+		{
+			if (b.above == null)
+            {
+				tops++;
+            }
+        }
+		if (tops > 1)
+			Debug.LogWarning("multiple tops");
+	
+	
+	}
+
+
 }
