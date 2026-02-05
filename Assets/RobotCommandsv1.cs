@@ -9,6 +9,8 @@ public class RobotCommandsv1 : MonoBehaviour {
 	 * controls with changable ints, then we'll move on to the proper controls
 	 * in the ui
 	 */
+    public Rigidbody2D rb2d;
+    public float jumpPower = 300f;
     public float movespeed = 0.5f;
 	public int HowManyBlocks;
     public static bool time;
@@ -23,20 +25,35 @@ public class RobotCommandsv1 : MonoBehaviour {
 	{
 		if(driveOn == true)
 		{
-            transform.position += new Vector3(movespeed * Time.deltaTime, 0);
+            transform.position += new Vector3(movespeed * 0.02f, 0);
         }
 
 		//move left or right
-		if (Input.GetKey(KeyCode.D))
+		if (Input.GetKeyDown(KeyCode.D))
 		{
 			StartCoroutine(movement());  
         }
 
 		//Attack (melee)
+		if(Input.GetKeyDown(KeyCode.S))
+		{
+			/*Attacking will Play an animation and during the animation will temporarily activate
+			* a boxcollider inflicting damage. the attack will be tied into the animation itself, which
+			* can have code in the animation for which direction to attack in. I'll finish this a bit
+			* Later since i still need to make a basic animation */
 
+			//FIXME:activate anim bool for attacking animation
+			Debug.Log("Attacking!");
+		}
 
 		//Jump
+		if (Input.GetKeyDown(KeyCode.W))
+		{
+            //due to the simple command by command gameplay, Jumping will only go straight up through semisolid platforms
 
+			//FIXME: add a if statment to check the player bot is on the floor
+            rb2d.AddForce(new Vector3(0,320 * jumpPower));
+        }
 
 		//Crouch (maybe)
 	}
@@ -44,7 +61,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 	IEnumerator movement()
 	{
 		driveOn = true;
-		yield return new WaitForSeconds((float)0.5 * HowManyBlocks);
+		yield return new WaitForSeconds((float)0.399 * HowManyBlocks); 
 		driveOn = false;
 	}
 }
