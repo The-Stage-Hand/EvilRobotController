@@ -15,6 +15,11 @@ public class RobotCommandsv1 : MonoBehaviour {
 	public int HowManyBlocks;
     public static bool time;
 	public bool driveOn = false;
+
+	//direction controls the direction
+	//0.02 is right and -0.02 is left
+	public float direction = 0.02f;
+	
 	// Use this for initialization
 	void Start () {
 		
@@ -25,17 +30,27 @@ public class RobotCommandsv1 : MonoBehaviour {
 	{
 		if(driveOn == true)
 		{
-            transform.position += new Vector3(movespeed * 0.02f, 0);
+            transform.position += new Vector3(movespeed * direction, 0);
         }
 
 		//move left or right
+
+		//right
 		if (Input.GetKeyDown(KeyCode.D))
 		{
+			direction = 0.02f;
 			StartCoroutine(movement());  
         }
 
-		//Attack (melee)
-		if(Input.GetKeyDown(KeyCode.S))
+		//left
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+			direction = -0.02f;
+            StartCoroutine(movement());
+        }
+
+        //Attack (melee)
+        if (Input.GetKeyDown(KeyCode.S))
 		{
 			/*Attacking will Play an animation and during the animation will temporarily activate
 			* a boxcollider inflicting damage. the attack will be tied into the animation itself, which
@@ -63,5 +78,8 @@ public class RobotCommandsv1 : MonoBehaviour {
 		driveOn = true;
 		yield return new WaitForSeconds((float)0.399 * HowManyBlocks); 
 		driveOn = false;
-	}
+		//reset directions
+        direction = 0f;
+        
+    }
 }
