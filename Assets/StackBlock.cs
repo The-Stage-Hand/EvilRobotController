@@ -65,7 +65,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
             Player = GameObject.FindGameObjectWithTag("Player").gameObject;
         }
-		action = Options.value;		
+		action = Options.value;
 		
 	}
 
@@ -190,23 +190,24 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	{
 		Debug.Log("executing"); // place execution code here
 		block.GetComponent<Renderer>().material = materialgreen;
-		if (action == 0)
+		if (action == 0 && nextaction)
 		{
-			int variable = (int)SliderObj.value;
+            nextaction = false;
+            int variable = (int)SliderObj.value;
 			StartCoroutine(Travel(variable,false));
 		}
-		else if (action == 1)
+		else if (action == 1 && nextaction)
 		{
-
-		}
-		else if (action == 2)
+            nextaction = false;
+        }
+		else if (action == 2 && nextaction)
 		{
-
-		}
-		else if (action == 3)
+            nextaction = false;
+        }
+		else if (action == 3 && nextaction)
 		{
-
-		}
+            nextaction = false;
+        }
 	}
 
 
@@ -223,12 +224,15 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			{ yield return null; }
 			else if (nextaction)
 			{
-				current.Execute();
-				nextaction = false;
+				print("running next action in runstack");
+                nextaction = false;
+
+                current.Execute();
+				
 				current = current.below;
 			}
 		}
-	
+		
 	
 	}
 	void ResetVisual()
