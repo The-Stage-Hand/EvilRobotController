@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -16,13 +19,14 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	private bool dragging;
 	private Vector3 dragoffset;
 	public float sensitivity = 1f;
+	Dropdown Options;
 	/// <summary>
 	public StackBlock publictarget;
-
-
-
-
-
+	public GameObject Player;
+	public float TravelSpeed = 2f;
+	public int action = 0;
+	public bool nextaction = true;
+	public Slider SliderObj;
 	
 
 	/// </summary>
@@ -40,11 +44,15 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			root = this;
 			above = null;
 		}
+		Player = GameObject.FindGameObjectWithTag("Player").gameObject;
+		Options = gameObject.GetComponentInChildren<Dropdown>();
+		SliderObj = gameObject.GetComponentInChildren<Slider>();
 	}
 	
 	// Update is called once per frame
 	private void Update () 
 	{
+		
 		if (above != null && !dragging)
 		{
 			transform.position = above.transform.position - new Vector3(0, offset, 0);
@@ -53,6 +61,11 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			LinkStep();
 		}
+		if (Player == null)
+		{
+            Player = GameObject.FindGameObjectWithTag("Player").gameObject;
+        }
+		action = Options.value;		
 		
 	}
 
@@ -177,7 +190,25 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	{
 		Debug.Log("executing"); // place execution code here
 		block.GetComponent<Renderer>().material = materialgreen;
+		if (action == 0)
+		{
+			int variable = (int)SliderObj.value;
+			StartCoroutine(Travel(variable,false));
+		}
+		else if (action == 1)
+		{
+
+		}
+		else if (action == 2)
+		{
+
+		}
+		else if (action == 3)
+		{
+
+		}
 	}
+
 
 
 	IEnumerator RunStack()
@@ -188,9 +219,14 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		
 		while (current != null)
 		{
-			current.Execute();
-			yield return new WaitForSeconds(0.3f);
-			current = current.below;
+			if (!nextaction)
+			{ yield return null; }
+			else if (nextaction)
+			{
+				current.Execute();
+				nextaction = false;
+				current = current.below;
+			}
 		}
 	
 	
@@ -203,7 +239,32 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		}
 	}
 
+	IEnumerator Travel(int distance, bool direction)
+	{
+        float CurrentTravelDist = 0;
+        
+		while (distance >= CurrentTravelDist)
+		{
+			yield return new WaitForSeconds(0.01f);
+			if (direction)
+			{
+				Player.transform.position -= new Vector3(TravelSpeed * 0.01f, 0,0);
+				CurrentTravelDist += TravelSpeed * 0.01f;
+				yield return null;
+			}
+			else 
+			{
+				Player.transform.position += new Vector3(TravelSpeed * 0.01f, 0, 0);
+				CurrentTravelDist += TravelSpeed * 0.01f;
+				yield return null;
+			}
+            
+			print("done moving: " + distance + " traveled: " + CurrentTravelDist);
+        }
+		yield return new WaitForSeconds(1);
+        nextaction = true;
 
+    }
 
 
 
