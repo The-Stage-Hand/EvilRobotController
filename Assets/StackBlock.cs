@@ -27,8 +27,11 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public int action = 0;
 	public bool nextaction = true;
 	public Slider SliderObj;
-	
 
+
+
+	private static bool IsExecuting = false;
+	private static Coroutine Runningroutine;
 	/// </summary>
 
 
@@ -59,7 +62,8 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		}
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			LinkStep();
+			if (!IsExecuting && root != null)
+				Runningroutine = StartCoroutine(ExecuteRoutine());
 		}
 		if (Player == null)
 		{
@@ -271,10 +275,37 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
     }
 
 
+	IEnumerator ExecuteRoutine()
+	{
+		if (root == null) yield break;
+		IsExecuting = true;
+		StackBlock current = root;
+		while (current != null)
+		{
+			current.Execute();
+			yield return new WaitForSeconds(0.3f);
+			current = current.below;
+		}
+		IsExecuting = false;
+		Runningroutine = null;
+	}
 
 
+	IEnumerator DoAction(Action onDone)
+	{
+		float duration = 2f;
+		float timer = 0f;
 
-
+		Vector3 start = transform.position;
+		Vector3 end = start + Vector3.right * 2f ;
+		while (timer < duration)
+		{
+			timer+= Time.deltaTime;
+			transform.position = Vector3.Lerp(start, end, timer / duration);
+			yield return null;
+		}
+		onDone.Invoke();
+	}
 
 
 
