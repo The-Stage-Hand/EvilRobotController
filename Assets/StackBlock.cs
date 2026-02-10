@@ -27,10 +27,10 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public int action = 0;
 	public bool nextaction = true;
 	public Slider SliderObj;
+	public Text valuetext;
 
-
-
-	private static bool IsExecuting = false;
+	StackBlock current;
+    private static bool IsExecuting = false;
 	private static Coroutine Runningroutine;
 	/// </summary>
 
@@ -50,6 +50,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		Player = GameObject.FindGameObjectWithTag("Player").gameObject;
 		Options = gameObject.GetComponentInChildren<Dropdown>();
 		SliderObj = gameObject.GetComponentInChildren<Slider>();
+		valuetext = gameObject.transform.Find("ValueText").GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
@@ -70,8 +71,9 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
             Player = GameObject.FindGameObjectWithTag("Player").gameObject;
         }
 		action = Options.value;
-		
-	}
+		valuetext.text = ((int)SliderObj.value).ToString();
+
+    }
 
 	public void OnPointerDown(PointerEventData eventdata)
     {
@@ -173,6 +175,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		StopAllCoroutines();
 		ResetVisual();
 		StartCoroutine(RunStack());
+		
 	}
 
 
@@ -212,16 +215,17 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
             nextaction = false;
         }
+		
 	}
 
 
 
 	IEnumerator RunStack()
-	{ 
+	{
 		if (root == null) yield break;
-	
+
 		StackBlock current = root;
-		
+
 		while (current != null)
 		{
 			if (!nextaction)
@@ -229,16 +233,46 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			else if (nextaction)
 			{
 				print("running next action in runstack");
-                nextaction = false;
+				nextaction = false;
 
-                current.Execute();
-				
+				current.Execute();
+
 				current = current.below;
 			}
 		}
-		
-	
+
+
 	}
+
+	//void RunStack()
+	//{
+
+	//	if (root == null) return;
+	//	current = root;
+	//	if (current != null && !nextaction)
+	//	{
+	//		print("runstack void");
+	//		nextaction = false;
+	//		current.Execute();
+	//		current = current.below;
+	//	}
+	//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	void ResetVisual()
 	{
 		foreach(var b in FindObjectsOfType<StackBlock>())
@@ -269,10 +303,12 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
             
 			print("done moving: " + distance + " traveled: " + CurrentTravelDist);
         }
+		print("completed travel");
 		yield return new WaitForSeconds(1);
         nextaction = true;
-
-    }
+		//Player.transform.position = new Vector3(Player.transform.position.y,Mathf.Round(Player.transform.position.x)+0.5f,0);
+		// attempt to fix drift
+	}
 
 
 	IEnumerator ExecuteRoutine()
