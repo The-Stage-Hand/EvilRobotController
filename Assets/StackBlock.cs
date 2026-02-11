@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
+public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler,IScrollHandler
 {
 	
 	public float offset = -200f;
@@ -28,10 +29,12 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public bool nextaction = true;
 	public Slider SliderObj;
 	public Text valuetext;
-
+	public bool modifyingSlider = false;
+	public float mousedelta = 0f;	
 	StackBlock current;
     private static bool IsExecuting = false;
 	private static Coroutine Runningroutine;
+	int tick = 0;
 	/// </summary>
 
 
@@ -57,7 +60,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	private void Update () 
 	{
 		
-		if (above != null && !dragging)
+        if (above != null && !dragging)
 		{
 			transform.position = above.transform.position - new Vector3(0, offset, 0);
 		}
@@ -72,21 +75,47 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
         }
 		action = Options.value;
 		valuetext.text = ((int)SliderObj.value).ToString();
+		
+		tick++;
 
     }
-
-	public void OnPointerDown(PointerEventData eventdata)
+	public void OnScroll(PointerEventData eventData)
+	{
+		if (modifyingSlider)
+		{
+			print("modifilying slider: scroll value: "  + eventData.scrollDelta.y);
+			if (eventData.scrollDelta.y > 0)
+			{
+				SliderObj.value +=1f;
+			}
+			if (eventData.scrollDelta.y < 0)
+			{
+				SliderObj.value -=1f;
+            }
+		}
+	}
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		modifyingSlider = true;
+	}
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		modifyingSlider = false;
+	}
+	public void OnPointerDown(PointerEventData eventData)
     {
-		print("mousedownonme");
+        
+        print("mousedownonme");
 		dragging = true;
 		if (above != null || below != null) Detach();
 		Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		mouseworld.z = transform.position.z;
 		dragoffset = transform.position - mouseworld;	
 	}
-	public void OnDrag(PointerEventData eventdata)
+	public void OnDrag(PointerEventData eventData)
     {
-		if (!dragging) { return; }
+        
+        if (!dragging) { return; }
         Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseworld.z = transform.position.z;
 		transform.position = mouseworld* sensitivity + dragoffset; 
@@ -257,7 +286,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	//		current = current.below;
 	//	}
 	//}
-
+	//^^^^^^^^^^^^ Causes crash
 
 
 
@@ -304,13 +333,13 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			print("done moving: " + distance + " traveled: " + CurrentTravelDist);
         }
 		print("completed travel");
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1f* distance);
         nextaction = true;
 		//Player.transform.position = new Vector3(Player.transform.position.y,Mathf.Round(Player.transform.position.x)+0.5f,0);
-		// attempt to fix drift
+		// attempt to fix float drift
 	}
 
-
+	// timing code 1 unit takes ~1.6s
 	IEnumerator ExecuteRoutine()
 	{
 		if (root == null) yield break;
@@ -319,7 +348,8 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		while (current != null)
 		{
 			current.Execute();
-			yield return new WaitForSeconds(0.3f);
+			
+			yield return new WaitForSeconds(1.6f*SliderObj.value);
 			current = current.below;
 		}
 		IsExecuting = false;
