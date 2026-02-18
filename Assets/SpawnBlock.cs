@@ -16,6 +16,8 @@ public class SpawnBlock : MonoBehaviour {
 	void Update () {
         vector3 = Input.mousePosition;
 		
+		//FIXME: when finishing up game, add parameters so you can only spawn code in the "code block", the area on ui where code is for
+
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
 			Instantiate(block, vector3, Quaternion.Euler(0, 0, 0),canvas);

@@ -14,11 +14,11 @@ public class RobotCommandsv1 : MonoBehaviour {
     public float movespeed = 0.5f;
 	public int HowManyBlocks;
     public static bool time;
-	public bool driveOn = false;
+	public static bool driveOn = false;
 
 	//direction controls the direction
 	//0.02 is right and -0.02 is left
-	public float direction = 0.02f;
+	public static float direction = 0.02f;
 	
 	// Use this for initialization
 	void Start () {
@@ -39,14 +39,14 @@ public class RobotCommandsv1 : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.D))
 		{
 			direction = 0.02f;
-			StartCoroutine(movement());  
+			StartCoroutine(movement(HowManyBlocks));  
         }
 
 		//left
         if (Input.GetKeyDown(KeyCode.A))
         {
 			direction = -0.02f;
-            StartCoroutine(movement());
+            StartCoroutine(movement(HowManyBlocks));
         }
 
         //Attack (melee)
@@ -73,13 +73,17 @@ public class RobotCommandsv1 : MonoBehaviour {
 		//Crouch (maybe)
 	}
 
-	IEnumerator movement()
+	public static IEnumerator movement(int HowManyBlocks)
 	{
+		//int HowManyBlocks = new RobotCommandsv1().HowManyBlocks;
+
+
+		Debug.Log("Starting movemnet");
 		driveOn = true;
 		yield return new WaitForSeconds((float)0.399 * HowManyBlocks); 
 		driveOn = false;
 		//reset directions
         direction = 0f;
-        
+        Debug.Log("ending movemnet");
     }
 }
