@@ -16,6 +16,8 @@ public class RobotCommandsv1 : MonoBehaviour {
     public static bool time;
 	public static bool driveOn = false;
 
+	public static bool jump = false;
+
 	//direction controls the direction
 	//0.02 is right and -0.02 is left
 	public static float direction = 0.02f;
@@ -33,6 +35,8 @@ public class RobotCommandsv1 : MonoBehaviour {
             transform.position += new Vector3(movespeed * direction, 0);
         }
 
+		//PLEASE NOTE: Left and right movemnet is turned off since we have niki's alternative
+		/*
 		//move left or right
 
 		//right
@@ -48,6 +52,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 			direction = -0.02f;
             StartCoroutine(movement(HowManyBlocks));
         }
+		*/
 
         //Attack (melee)
         if (Input.GetKeyDown(KeyCode.S))
@@ -62,8 +67,9 @@ public class RobotCommandsv1 : MonoBehaviour {
 		}
 
 		//Jump
-		if (Input.GetKeyDown(KeyCode.W))
+		if (jump == true)
 		{
+			jump = false;
             //due to the simple command by command gameplay, Jumping will only go straight up through semisolid platforms
 
 			//FIXME: add a if statment to check the player bot is on the floor
@@ -75,9 +81,6 @@ public class RobotCommandsv1 : MonoBehaviour {
 
 	public static IEnumerator movement(int HowManyBlocks)
 	{
-		//int HowManyBlocks = new RobotCommandsv1().HowManyBlocks;
-
-
 		Debug.Log("Starting movemnet");
 		driveOn = true;
 		yield return new WaitForSeconds((float)0.399 * HowManyBlocks); 

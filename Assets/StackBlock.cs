@@ -59,7 +59,6 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	// Update is called once per frame
 	private void Update () 
 	{
-		
         if (above != null && !dragging)
 		{
 			transform.position = above.transform.position - new Vector3(0, offset, 0);
@@ -222,30 +221,39 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
     //		current = current.below;
     //	}
     //}
+
+	//code for actually executing a set of code
     void Execute()
 	{
 		Debug.Log("executing"); // place execution code here
 		block.GetComponent<Renderer>().material = materialgreen;
 		if (action == 0 && nextaction)
 		{
+			//Code for executing walking
             nextaction = false;
             int variable = (int)SliderObj.value;
 			StartCoroutine(Travel(variable,false));
 		}
 		else if (action == 1 && nextaction)
 		{
+			//code for executing a jump
             nextaction = false;
+			RobotCommandsv1.jump = true;
         }
 		else if (action == 2 && nextaction)
 		{
+			//code for a projectile attack
+            Debug.Log("Action not yet coded");
             nextaction = false;
         }
 		else if (action == 3 && nextaction)
 		{
+            Debug.Log("Action not yet coded");
             nextaction = false;
         }
-		
-	}
+
+        
+    }
 
 
 
@@ -310,8 +318,11 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		}
 	}
 
+	//Walking Code
+	//PLEASE NOTE: i have commented out all debug mentions to test other stuff, keep in mind if we have to fix movement
 	IEnumerator Travel(int distance, bool direction)
 	{
+		//FIXME: add a way to go both LEFT & RIGHT
         float CurrentTravelDist = 0;
         
 		while (distance >= CurrentTravelDist)
@@ -330,9 +341,9 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 				yield return null;
 			}
             
-			print("done moving: " + distance + " traveled: " + CurrentTravelDist);
+			//print("done moving: " + distance + " traveled: " + CurrentTravelDist);
         }
-		print("completed travel");
+		//print("completed travel");
 		yield return new WaitForSeconds(1f* distance);
         nextaction = true;
 		//Player.transform.position = new Vector3(Player.transform.position.y,Mathf.Round(Player.transform.position.x)+0.5f,0);
