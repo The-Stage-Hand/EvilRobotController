@@ -20,7 +20,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	private bool dragging;
 	private Vector3 dragoffset;
 	public float sensitivity = 1f;
-	Dropdown Options;
+	public	Dropdown Options;
 	/// <summary>
 	public StackBlock publictarget;
 	public GameObject Player;
@@ -35,6 +35,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
     private static bool IsExecuting = false;
 	private static Coroutine Runningroutine;
 	int tick = 0;
+	public GameObject bullet;
 	/// </summary>
 
 
@@ -54,11 +55,16 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		Options = gameObject.GetComponentInChildren<Dropdown>();
 		SliderObj = gameObject.GetComponentInChildren<Slider>();
 		valuetext = gameObject.transform.Find("ValueText").GetComponent<Text>();
+		
 	}
 	
 	// Update is called once per frame
-	private void Update () 
+	public void Update () 
 	{
+<<<<<<< Updated upstream
+=======
+        
+>>>>>>> Stashed changes
         if (above != null && !dragging)
 		{
 			transform.position = above.transform.position - new Vector3(0, offset, 0);
@@ -72,8 +78,12 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
             Player = GameObject.FindGameObjectWithTag("Player").gameObject;
         }
-		action = Options.value;
-		valuetext.text = ((int)SliderObj.value).ToString();
+		if (Options == null)
+		{
+			Debug.LogError("missing options");
+		}
+		
+        valuetext.text = ((int)SliderObj.value).ToString();
 		
 		tick++;
 
@@ -238,7 +248,11 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			//code for executing a jump
             nextaction = false;
+<<<<<<< Updated upstream
 			RobotCommandsv1.jump = true;
+=======
+			Shoot();
+>>>>>>> Stashed changes
         }
 		else if (action == 2 && nextaction)
 		{
@@ -296,7 +310,11 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	//}
 	//^^^^^^^^^^^^ Causes crash
 
-
+	public void SetAction(int action)
+	{
+		print(action + "  value changed");
+	this.action = action; 
+	}
 
 
 
@@ -349,7 +367,13 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		//Player.transform.position = new Vector3(Player.transform.position.y,Mathf.Round(Player.transform.position.x)+0.5f,0);
 		// attempt to fix float drift
 	}
+	public void Shoot()
+	{
+		PropelProjectile ppj = null;
+		ppj = Instantiate(bullet).GetComponent<PropelProjectile>();
+		ppj.Initialize(0.1f,3f,false);
 
+	}
 	// timing code 1 unit takes ~1.6s
 	IEnumerator ExecuteRoutine()
 	{

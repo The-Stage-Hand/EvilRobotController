@@ -985,6 +985,7 @@ MonoBehaviour:
   materialred: {fileID: 2100000, guid: 657fd376bb1c15f41b2324ed9f65a27a, type: 2}
   materialgreen: {fileID: 2100000, guid: 19637eb8723d0d144bb265e58af25f01, type: 2}
   sensitivity: 24
+  Options: {fileID: 0}
   publictarget: {fileID: 0}
   Player: {fileID: 0}
   TravelSpeed: 2
@@ -994,6 +995,7 @@ MonoBehaviour:
   valuetext: {fileID: 0}
   modifyingSlider: 0
   mousedelta: 0
+  bullet: {fileID: 1693881981923370, guid: b3d1e9bc5b890ba4bb9ffd24a9fb3e51, type: 2}
 --- !u!114 &114720959432086162
 MonoBehaviour:
   m_ObjectHideFlags: 1
