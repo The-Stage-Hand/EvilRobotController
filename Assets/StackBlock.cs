@@ -36,6 +36,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	private static Coroutine Runningroutine;
 	int tick = 0;
 	public GameObject bullet;
+	public float JumpForce = 8500f;
 	/// </summary>
 
 
@@ -59,12 +60,20 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	}
 	
 	// Update is called once per frame
-	public void Update () 
-	{
-<<<<<<< Updated upstream
-=======
-        
->>>>>>> Stashed changes
+	public void Update ()
+	{ 
+        if (Options.captionText.text == "Move")
+		{
+			action = 0;
+		}
+        if (Options.captionText.text == "Shoot")
+        {
+			action = 1;
+        }
+        if (Options.captionText.text == "Jump")
+        {
+			action = 2;
+        }
         if (above != null && !dragging)
 		{
 			transform.position = above.transform.position - new Vector3(0, offset, 0);
@@ -246,18 +255,17 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		}
 		else if (action == 1 && nextaction)
 		{
-			//code for executing a jump
+			//code for executing a SHOOT
+			print("Shooting");
             nextaction = false;
-<<<<<<< Updated upstream
-			RobotCommandsv1.jump = true;
-=======
 			Shoot();
->>>>>>> Stashed changes
+
         }
 		else if (action == 2 && nextaction)
 		{
-			//code for a projectile attack
-            Debug.Log("Action not yet coded");
+			//code for a JUMP
+			print("jumping");
+            Jump();
             nextaction = false;
         }
 		else if (action == 3 && nextaction)
@@ -265,7 +273,14 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
             Debug.Log("Action not yet coded");
             nextaction = false;
         }
-
+		else if (!nextaction)
+		{
+			print("no nextaction");
+		}	
+		else
+		{
+			Debug.LogError("something went wrong in executing");
+		}
         
     }
 
@@ -370,9 +385,14 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public void Shoot()
 	{
 		PropelProjectile ppj = null;
-		ppj = Instantiate(bullet).GetComponent<PropelProjectile>();
-		ppj.Initialize(0.1f,3f,false);
-
+		ppj = Instantiate(bullet,Player.transform).GetComponent<PropelProjectile>();
+		ppj.Initialize(8f,0.1f,false);
+		nextaction=true;
+	}
+	public void Jump()
+	{
+		Player.GetComponent<Rigidbody2D>().AddForce(new Vector3(0,JumpForce,0));
+		nextaction=true;
 	}
 	// timing code 1 unit takes ~1.6s
 	IEnumerator ExecuteRoutine()

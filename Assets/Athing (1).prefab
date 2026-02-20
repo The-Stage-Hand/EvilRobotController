@@ -996,6 +996,7 @@ MonoBehaviour:
   modifyingSlider: 0
   mousedelta: 0
   bullet: {fileID: 1693881981923370, guid: b3d1e9bc5b890ba4bb9ffd24a9fb3e51, type: 2}
+  JumpForce: 8500
 --- !u!114 &114720959432086162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1071,7 +1072,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Shoot
       m_Image: {fileID: 0}
-    - m_Text: idk
+    - m_Text: Jump
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1445,7 +1446,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 229.62433, y: 293.41827}
+  m_AnchoredPosition: {x: -0.98606396, y: 6.6124706}
   m_SizeDelta: {x: 270.24, y: 39.64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224430558312644994

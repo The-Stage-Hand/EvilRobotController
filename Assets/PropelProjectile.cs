@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PropelProjectile : MonoBehaviour {
-	public float lifetimeobj;
-	float speedobj;
-	bool leftfaceobj;
+	public float lifetimeobj = 4f;
+	float speedobj=0f;
+	bool leftfaceobj=false;
 
 	// Use this for initialization
 	void Start () {
+		print("bullet is alive");
+		Debug.Log("bullet is here" + gameObject.name,gameObject);
 		if (lifetimeobj == 0)
 		{
 			print("setting to 10f");
@@ -35,19 +37,24 @@ public class PropelProjectile : MonoBehaviour {
 		}
 	}
 	
-	public void Initialize(float speed, float lifetime,bool facingleft)
+	public void Initialize(float lifetime, float speed, bool facingleft)
 	{
+		print("bullet has been initialized and set");
 		lifetimeobj = lifetime;
 		speedobj = speed;
 		leftfaceobj = facingleft;
-		Destroy(gameObject,lifetimeobj);
+		
 	}
 	IEnumerator LifeTime()
 	{
-		while (true)
+		while (lifetimeobj >= 0)
 		{ 
 			yield return new WaitForSecondsRealtime(.1f);
 			lifetimeobj -= .1f;
+		}
+		if (lifetimeobj <= 0)
+		{
+			Destroy(gameObject);
 		}
 	}
 }
