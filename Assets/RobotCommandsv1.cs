@@ -10,6 +10,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 	 * in the ui
 	 */
     public Rigidbody2D rb2d;
+	public GameObject FloorChecker;
     public float jumpPower = 300f;
     public float movespeed = 0.5f;
 	public int HowManyBlocks;
@@ -69,6 +70,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 		//Jump
 		if (jump == true)
 		{
+			//if()
 			jump = false;
             //due to the simple command by command gameplay, Jumping will only go straight up through semisolid platforms
 
@@ -78,8 +80,13 @@ public class RobotCommandsv1 : MonoBehaviour {
 
 		//Crouch (maybe)
 	}
+    void OnTriggerEnter2D(Collider2D other)
+	{
 
-	public static IEnumerator movement(int HowManyBlocks)
+	}
+
+
+    public static IEnumerator movement(int HowManyBlocks)
 	{
 		Debug.Log("Starting movemnet");
 		driveOn = true;
@@ -89,4 +96,6 @@ public class RobotCommandsv1 : MonoBehaviour {
         direction = 0f;
         Debug.Log("ending movemnet");
     }
+
+	
 }
