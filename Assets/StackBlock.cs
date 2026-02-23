@@ -78,7 +78,15 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			transform.parent.position = above.transform.position - new Vector3(0, offset, 0);
 		}
-		if (Input.GetKeyDown(KeyCode.Space))
+        if (0.2f <= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
+        {
+            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.3f)).x, transform.parent.position.y, 0);
+        }
+        if (0.08f >= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
+        {
+            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.3f)).x, transform.parent.position.y, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
 		{
 			if (!IsExecuting && root != null)
 				Runningroutine = StartCoroutine(ExecuteRoutine());
@@ -130,7 +138,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			if (above != null || below != null) Detach();
 			Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			mouseworld.z = transform.position.z;
-			dragoffset = transform.position - mouseworld;
+			//dragoffset = transform.position;
 		
 	}
 	public void OnDrag(PointerEventData eventData)
