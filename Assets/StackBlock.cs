@@ -76,7 +76,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
         }
         if (above != null && !dragging)
 		{
-			transform.position = above.transform.position - new Vector3(0, offset, 0);
+			transform.parent.position = above.transform.position - new Vector3(0, offset, 0);
 		}
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
@@ -122,21 +122,24 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	}
 	public void OnPointerDown(PointerEventData eventData)
     {
-        
-        print("mousedownonme");
-		dragging = true;
-		if (above != null || below != null) Detach();
-		Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		mouseworld.z = transform.position.z;
-		dragoffset = transform.position - mouseworld;	
+		
+
+
+			print("mousedownonme");
+			dragging = true;
+			if (above != null || below != null) Detach();
+			Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			mouseworld.z = transform.position.z;
+			dragoffset = transform.position - mouseworld;
+		
 	}
 	public void OnDrag(PointerEventData eventData)
     {
         
         if (!dragging) { return; }
-        Vector3 mouseworld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseworld = Camera.main.ViewportToWorldPoint(Input.mousePosition);
         mouseworld.z = transform.position.z;
-		transform.position = mouseworld* sensitivity + dragoffset; 
+		transform.parent.position = mouseworld * 0.1f;
     }
 	public void OnPointerUp(PointerEventData eventdata)
 	{
