@@ -979,7 +979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b522320585f4d749a5d22064551380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: 68
+  offset: 101
   above: {fileID: 0}
   below: {fileID: 0}
   materialred: {fileID: 2100000, guid: 657fd376bb1c15f41b2324ed9f65a27a, type: 2}

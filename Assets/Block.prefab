@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224561168275411776}
   - component: {fileID: 222145133660455800}
   - component: {fileID: 114324458200634872}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,12 +639,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b522320585f4d749a5d22064551380f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: 68
+  offset: 101
   above: {fileID: 0}
   below: {fileID: 0}
   materialred: {fileID: 2100000, guid: 657fd376bb1c15f41b2324ed9f65a27a, type: 2}
   materialgreen: {fileID: 2100000, guid: 19637eb8723d0d144bb265e58af25f01, type: 2}
   sensitivity: 24
+  Options: {fileID: 0}
   publictarget: {fileID: 0}
   Player: {fileID: 0}
   TravelSpeed: 2
@@ -655,6 +656,7 @@ MonoBehaviour:
   modifyingSlider: 0
   mousedelta: 0
   bullet: {fileID: 1693881981923370, guid: b3d1e9bc5b890ba4bb9ffd24a9fb3e51, type: 2}
+  JumpForce: 8500
 --- !u!114 &114324458200634872
 MonoBehaviour:
   m_ObjectHideFlags: 1
