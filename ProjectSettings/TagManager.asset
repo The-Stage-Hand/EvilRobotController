@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - FloorChecker
+  - Brick
+  - FloorBlock
   layers:
   - Default
   - TransparentFX

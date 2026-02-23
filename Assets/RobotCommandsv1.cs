@@ -24,7 +24,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
+		rb2d = gameObject.GetComponent<Rigidbody2D>();
 	}
 
 	// Update is called once per frame

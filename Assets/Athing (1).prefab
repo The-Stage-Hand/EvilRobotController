@@ -996,7 +996,7 @@ MonoBehaviour:
   modifyingSlider: 0
   mousedelta: 0
   bullet: {fileID: 1693881981923370, guid: b3d1e9bc5b890ba4bb9ffd24a9fb3e51, type: 2}
-  JumpForce: 8500
+  JumpForce: 1000000
 --- !u!114 &114720959432086162
 MonoBehaviour:
   m_ObjectHideFlags: 1

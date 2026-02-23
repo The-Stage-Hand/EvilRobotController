@@ -394,7 +394,8 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	}
 	public void Jump()
 	{
-		Player.GetComponent<Rigidbody2D>().AddForce(new Vector3(0,JumpForce,0));
+		//Player.GetComponent<Rigidbody2D>().AddForce(new Vector3(0,JumpForce,0));
+		RobotCommandsv1.jump = true;
 		nextaction=true;
 	}
 	// timing code 1 unit takes ~1.6s
