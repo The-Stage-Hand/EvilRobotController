@@ -348,36 +348,6 @@ Prefab:
       propertyPath: m_Name
       value: LA-KE1 (Player Robot)
       objectReference: {fileID: 0}
-    - target: {fileID: 61007264222417804, guid: 52e5709bf1922264aa921c601c0075ec,
-        type: 2}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61007264222417804, guid: 52e5709bf1922264aa921c601c0075ec,
-        type: 2}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 50631345432418396, guid: 52e5709bf1922264aa921c601c0075ec,
-        type: 2}
-      propertyPath: m_Mass
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 50631345432418396, guid: 52e5709bf1922264aa921c601c0075ec,
-        type: 2}
-      propertyPath: m_LinearDrag
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 50631345432418396, guid: 52e5709bf1922264aa921c601c0075ec,
-        type: 2}
-      propertyPath: m_AngularDrag
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 50631345432418396, guid: 52e5709bf1922264aa921c601c0075ec,
-        type: 2}
-      propertyPath: m_UseAutoMass
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52e5709bf1922264aa921c601c0075ec, type: 2}
   m_IsPrefabParent: 0

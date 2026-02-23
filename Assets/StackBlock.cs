@@ -385,7 +385,10 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public void Shoot()
 	{
 		PropelProjectile ppj = null;
-		ppj = Instantiate(bullet,Player.transform).GetComponent<PropelProjectile>();
+		ppj = Instantiate(bullet,Player.transform.position,Quaternion.identity,Player.transform).GetComponent<PropelProjectile>();
+		ppj.transform.position = Player.transform.position;
+		ppj.transform.parent = Player.transform;
+		ppj.transform.parent = null;
 		ppj.Initialize(8f,0.1f,false);
 		nextaction=true;
 	}
