@@ -86,7 +86,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 	}
 
 
-    public static IEnumerator movement(int HowManyBlocks)
+    public static IEnumerator Movement(int HowManyBlocks)
 	{
 		Debug.Log("Starting movemnet");
 		driveOn = true;

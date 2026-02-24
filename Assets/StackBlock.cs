@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -37,6 +37,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	int tick = 0;
 	public GameObject bullet;
 	public float JumpForce = 8500f;
+	StackBlock[] Stackblocks = new StackBlock[100];
 	/// </summary>
 
 
@@ -61,30 +62,37 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	
 	// Update is called once per frame
 	public void Update ()
-	{ 
+	{
+		Stackblocks = FindObjectsOfType<StackBlock>();
         if (Options.captionText.text == "Move")
 		{
-			action = 0;
+            SliderObj.gameObject.SetActive(true);
+			valuetext.gameObject.SetActive(true);
+            action = 0;
 		}
         if (Options.captionText.text == "Shoot")
         {
+			SliderObj.gameObject.SetActive(false);
+			valuetext.gameObject.SetActive(false);
 			action = 1;
         }
         if (Options.captionText.text == "Jump")
         {
-			action = 2;
+            SliderObj.gameObject.SetActive(false);
+			valuetext.gameObject.SetActive(false);
+            action = 2;
         }
         if (above != null && !dragging)
 		{
 			transform.parent.position = above.transform.position - new Vector3(0, offset, 0);
 		}
-        if (0.2f <= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
+        if (0.1f <= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
         {
-            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.3f)).x, transform.parent.position.y, 0);
+            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0.3f, 0)).x-40f, transform.parent.position.y, 0);
         }
-        if (0.08f >= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
+        if (0.1f >= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
         {
-            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.3f)).x, transform.parent.position.y, 0);
+            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0.3f, 0)).x + 90f, transform.parent.position.y, 0);
         }
         if (Input.GetKeyDown(KeyCode.Space))
 		{
@@ -237,20 +245,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	}
 
 
-    //void LinkStep()
-    //{
-    //	if (root == null)
-    //	{
-    //		Debug.LogWarning("no root to execute");
-    //		return;
-    //	}
-    //	StackBlock current = root;
-    //	while (current != null)
-    //	{
-    //		current.Execute();
-    //		current = current.below;
-    //	}
-    //}
+    
 
 	//code for actually executing a set of code
     void Execute()
@@ -321,34 +316,12 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 
 	}
 
-	//void RunStack()
-	//{
-
-	//	if (root == null) return;
-	//	current = root;
-	//	if (current != null && !nextaction)
-	//	{
-	//		print("runstack void");
-	//		nextaction = false;
-	//		current.Execute();
-	//		current = current.below;
-	//	}
-	//}
-	//^^^^^^^^^^^^ Causes crash
 
 	public void SetAction(int action)
 	{
 		print(action + "  value changed");
 	this.action = action; 
 	}
-
-
-
-
-
-
-
-
 
 
 
@@ -408,6 +381,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		//Player.GetComponent<Rigidbody2D>().AddForce(new Vector3(0,JumpForce,0));
 		RobotCommandsv1.jump = true;
 		nextaction=true;
+		// Nextaction does not work after jumping
 	}
 	// timing code 1 unit takes ~1.6s
 	IEnumerator ExecuteRoutine()

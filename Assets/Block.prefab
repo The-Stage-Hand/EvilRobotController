@@ -609,7 +609,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: Shoot
       m_Image: {fileID: 0}
-    - m_Text: idk
+    - m_Text: Jump
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1500,7 +1500,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -524.7705, y: -343.3238}
+  m_AnchoredPosition: {x: -214.49841, y: 1028.9055}
   m_SizeDelta: {x: 222.45, y: 197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224569027734373700
