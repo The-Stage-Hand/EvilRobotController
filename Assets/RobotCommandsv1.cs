@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class RobotCommandsv1 : MonoBehaviour {
 
-    /* This is the basic controller inside of the robot character itself
+	/* This is the basic controller inside of the robot character itself
 	 * currently i'm implemting his basic controls, then we will test the 
 	 * controls with changable ints, then we'll move on to the proper controls
 	 * in the ui
 	 */
+	public static bool OnFloor;
     public Rigidbody2D rb2d;
 	public GameObject FloorChecker;
     public float jumpPower = 300f;
@@ -19,6 +20,8 @@ public class RobotCommandsv1 : MonoBehaviour {
 
 	public static bool jump = false;
 
+
+	public AudioClip JumpSfx, CannotJumpSfx;
 	//direction controls the direction
 	//0.02 is right and -0.02 is left
 	public static float direction = 0.02f;
@@ -55,8 +58,9 @@ public class RobotCommandsv1 : MonoBehaviour {
         }
 		*/
 
+		/*
         //Attack (melee)
-        if (Input.GetKeyDown(KeyCode.S))
+        if (/Input.GetKeyDown(KeyCode.S))
 		{
 			/*Attacking will Play an animation and during the animation will temporarily activate
 			* a boxcollider inflicting damage. the attack will be tied into the animation itself, which
@@ -64,28 +68,30 @@ public class RobotCommandsv1 : MonoBehaviour {
 			* Later since i still need to make a basic animation */
 
 			//FIXME:activate anim bool for attacking animation
-			Debug.Log("Attacking!");
-		}
-
+			//Debug.Log("Attacking!");
+		//}
+	    //*
+	
 		//Jump
-		if (jump == true)
+		if (//jump == true)
+            Input.GetKeyDown(KeyCode.S))
 		{
-			//if()
+
+			if (OnFloor == true)
+			{
+				//start jump coroutine
+				StartCoroutine(Jumping(jumpPower, rb2d));
+			}
+			else
+			{
+				Debug.Log("NOT ON FLOOR");
+				//play error sound
+			}
 			jump = false;
-            //due to the simple command by command gameplay, Jumping will only go straight up through semisolid platforms
-
-			//FIXME: add a if statment to check the player bot is on the floor
-            rb2d.AddForce(new Vector3(0,320 * jumpPower));
         }
-
-		//Crouch (maybe)
-	}
-    void OnTriggerEnter2D(Collider2D other)
-	{
-
 	}
 
-
+	/*
     public static IEnumerator movement(int HowManyBlocks)
 	{
 		Debug.Log("Starting movemnet");
@@ -96,6 +102,13 @@ public class RobotCommandsv1 : MonoBehaviour {
         direction = 0f;
         Debug.Log("ending movemnet");
     }
-
-	
+	*/
+	public static IEnumerator Jumping(float jumpPower, Rigidbody2D rb2d)
+	{
+		jump = false;
+		//start animation
+        yield return new WaitForSeconds(.25f);
+        rb2d.AddForce(new Vector3(0, 320 * jumpPower));
+		//play jumping sfx
+    }
 }
