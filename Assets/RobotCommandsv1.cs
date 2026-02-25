@@ -18,7 +18,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 	public static bool driveOn = false;
 
 	public static bool jump = false;
-
+	public static bool OnFloor;
 	//direction controls the direction
 	//0.02 is right and -0.02 is left
 	public static float direction = 0.02f;
@@ -70,20 +70,19 @@ public class RobotCommandsv1 : MonoBehaviour {
 		//Jump
 		if (jump == true)
 		{
-			//if()
-			jump = false;
-            //due to the simple command by command gameplay, Jumping will only go straight up through semisolid platforms
-
-			//FIXME: add a if statment to check the player bot is on the floor
-            rb2d.AddForce(new Vector3(0,320 * jumpPower));
+			if(OnFloor == true)
+			{
+				StartCoroutine(Jumping(jumpPower,rb2d));
+			}
+			else
+			{
+				
+			}
         }
 
 		//Crouch (maybe)
 	}
-    void OnTriggerEnter2D(Collider2D other)
-	{
 
-	}
 
 
     public static IEnumerator Movement(int HowManyBlocks)
@@ -97,5 +96,20 @@ public class RobotCommandsv1 : MonoBehaviour {
         Debug.Log("ending movemnet");
     }
 
-	
+    public static IEnumerator Jumping(float jumpPower, Rigidbody2D rb2d)
+    {
+		Debug.Log("Jumping");
+        yield return new WaitForSeconds(0.125f);
+        rb2d.AddForce(new Vector3(0, 320 * jumpPower));
+        Debug.Log("Jump complete");
+    }
+
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.tag == "ReachGoal")
+		{
+			//FIXME:add more stuff to this
+			Debug.Log("Level beat");
+		}
+	}
 }
