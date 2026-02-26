@@ -7,6 +7,7 @@ public class SpawnBlock : MonoBehaviour {
 	public GameObject block;
 	Vector3 vector3;
 	public Transform canvas;
+
     // Use this for initialization
     void Start () {
 		

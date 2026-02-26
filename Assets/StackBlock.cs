@@ -38,6 +38,8 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public GameObject bullet;
 	public float JumpForce = 8500f;
 	StackBlock[] Stackblocks = new StackBlock[100];
+	bool hasbegun = false;
+	public Button StartButton;
 	/// </summary>
 
 
@@ -57,6 +59,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		Options = gameObject.GetComponentInChildren<Dropdown>();
 		SliderObj = gameObject.GetComponentInChildren<Slider>();
 		valuetext = gameObject.transform.Find("ValueText").GetComponent<Text>();
+		StartButton = GameObject.Find("StartButton").GetComponent<Button>();
 		
 	}
 	
@@ -86,20 +89,19 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			transform.parent.position = above.transform.position - new Vector3(0, offset, 0);
 		}
-        if (0.1f <= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
-        {
-            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0.3f, 0)).x-40f, transform.parent.position.y, 0);
-        }
-        if (0.1f >= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
-        {
-            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0.3f, 0)).x + 90f, transform.parent.position.y, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-		{
-			if (!IsExecuting && root != null)
-				Runningroutine = StartCoroutine(ExecuteRoutine());
-		}
-		if (Player == null)
+        if (0.4f <= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
+            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0.4f, 0)).x+20f, transform.parent.position.y, 0);
+        
+        if (0.4f >= Camera.main.ScreenToViewportPoint(transform.parent.position).x)
+            transform.parent.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector3(0.4f, 0)).x + 150f, transform.parent.position.y, 0);
+
+		if (0.7f <= Camera.main.ScreenToViewportPoint(transform.parent.position).y)
+			transform.parent.position = new Vector3(transform.parent.position.x, Camera.main.ViewportToWorldPoint(new Vector3(0, 0.8f)).y+500f, 0);
+
+        if (0.2f >= Camera.main.ScreenToViewportPoint(transform.parent.position).y)
+            transform.parent.position = new Vector3(transform.parent.position.x, Camera.main.ViewportToWorldPoint(new Vector3(0, 0.2f)).y+140f, 0);
+
+        if (Player == null)
 		{
             Player = GameObject.FindGameObjectWithTag("Player").gameObject;
         }
@@ -107,7 +109,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			Debug.LogError("missing options");
 		}
-		
+		StartButton.Invoke("StartCode",0);
         valuetext.text = ((int)SliderObj.value).ToString();
 		
 		tick++;
@@ -407,18 +409,25 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		float timer = 0f;
 
 		Vector3 start = transform.position;
-		Vector3 end = start + Vector3.right * 2f ;
+		Vector3 end = start + Vector3.right * 2f;
 		while (timer < duration)
 		{
-			timer+= Time.deltaTime;
+			timer += Time.deltaTime;
 			transform.position = Vector3.Lerp(start, end, timer / duration);
 			yield return null;
 		}
 		onDone.Invoke();
 	}
 
-
-
+	public void StartCode()
+	{
+		if (!IsExecuting && root != null && !hasbegun)
+		{
+			hasbegun = true;
+			Runningroutine = StartCoroutine(ExecuteRoutine());
+		
+		}
+    }
 
 
 
