@@ -270,7 +270,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		else if (action == 2 && nextaction)
 		{
 			//code for a JUMP
-			print("jumping");
+			print("calling jump to start jumping");
             Jump();
             nextaction = false;
         }
@@ -379,7 +379,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	public void Jump()
 	{
 		//Player.GetComponent<Rigidbody2D>().AddForce(new Vector3(0,JumpForce,0));
-		RobotCommandsv1.jump = true;
+		RobotCommandsv1.jump = 1;
 		nextaction=true;
 		// Nextaction does not work after jumping
 	}

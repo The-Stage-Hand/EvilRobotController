@@ -19,7 +19,7 @@ public class FloorChecker : MonoBehaviour {
         if (other.tag == "FloorBlock")
         {
             Debug.Log("OnFloor");
-           // RobotCommandsv1.OnFloor = true;
+            RobotCommandsv1.OnFloor = true;
         }
     }
 
