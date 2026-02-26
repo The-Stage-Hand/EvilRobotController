@@ -17,7 +17,7 @@ public class RobotCommandsv1 : MonoBehaviour {
     public static bool time;
 	public static bool driveOn = false;
 
-	public static bool jump = false;
+	public static int jump = 0;
 	public static bool OnFloor;
 	//direction controls the direction
 	//0.02 is right and -0.02 is left
@@ -68,23 +68,25 @@ public class RobotCommandsv1 : MonoBehaviour {
 		}
 
 		//Jump
-		if (jump == true)
+		if (jump == 1)
 		{
-			if(OnFloor == true)
+            if (OnFloor == true)
 			{
-				StartCoroutine(Jumping(jumpPower,rb2d));
-			}
+                StartCoroutine(Jumping(jumpPower,rb2d));
+                
+            }
 			else
 			{
 				
 			}
+			
         }
 
 		//Crouch (maybe)
 	}
 
 
-
+	/*
     public static IEnumerator Movement(int HowManyBlocks)
 	{
 		Debug.Log("Starting movemnet");
@@ -94,17 +96,17 @@ public class RobotCommandsv1 : MonoBehaviour {
 		//reset directions
         direction = 0f;
         Debug.Log("ending movemnet");
-    }
+    }*/
 
     public static IEnumerator Jumping(float jumpPower, Rigidbody2D rb2d)
     {
 		Debug.Log("Jumping");
         yield return new WaitForSeconds(0.125f);
-        rb2d.AddForce(new Vector3(0, 320 * jumpPower));
+        rb2d.AddForce(new Vector3(0, 30 * jumpPower));
         Debug.Log("Jump complete");
     }
 
-	void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
 	{
 		if (other.tag == "ReachGoal")
 		{

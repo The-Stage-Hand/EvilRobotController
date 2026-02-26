@@ -8,6 +8,8 @@ TagManager:
   - Brick
   - FloorBlock
   - ReachGoal
+  - BulletShot
+  - BlastableBlock
   layers:
   - Default
   - TransparentFX
