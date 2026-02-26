@@ -102,9 +102,8 @@ public class RobotCommandsv1 : MonoBehaviour {
     {
 		Debug.Log("Jumping");
         yield return new WaitForSeconds(0.125f);
-        rb2d.AddForce(new Vector3(0, 20 * jumpPower));
+        rb2d.AddForce(new Vector3(0, 30 * jumpPower));
         Debug.Log("Jump complete");
-        jump = 0;
     }
 
     void OnTriggerEnter2D(Collider2D other)
