@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RobotCommandsv1 : MonoBehaviour {
 
@@ -16,6 +17,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 	public int HowManyBlocks;
     public static bool time;
 	public static bool driveOn = false;
+	public GameObject WinText;
 
 	public static int jump;
 	public static bool OnFloor;
@@ -112,6 +114,7 @@ public class RobotCommandsv1 : MonoBehaviour {
 		{
 			//FIXME:add more stuff to this
 			Debug.Log("Level beat");
+			WinText.SetActive(true);
 		}
 	}
 }
