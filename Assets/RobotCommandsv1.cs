@@ -17,7 +17,7 @@ public class RobotCommandsv1 : MonoBehaviour {
     public static bool time;
 	public static bool driveOn = false;
 
-	public static int jump = 0;
+	public static int jump;
 	public static bool OnFloor;
 	//direction controls the direction
 	//0.02 is right and -0.02 is left
@@ -75,7 +75,7 @@ public class RobotCommandsv1 : MonoBehaviour {
                 StartCoroutine(Jumping(jumpPower,rb2d));
                 
             }
-			else
+			else if (OnFloor == false)
 			{
 				
 			}
@@ -102,7 +102,7 @@ public class RobotCommandsv1 : MonoBehaviour {
     {
 		Debug.Log("Jumping");
         yield return new WaitForSeconds(0.125f);
-        rb2d.AddForce(new Vector3(0, 30 * jumpPower));
+        rb2d.AddForce(new Vector3(0, 20 * jumpPower));
         Debug.Log("Jump complete");
     }
 
