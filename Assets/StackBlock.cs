@@ -40,6 +40,8 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	StackBlock[] Stackblocks = new StackBlock[100];
 	bool hasbegun = false;
 	public Button StartButton;
+	Toggle swap;
+
 	/// </summary>
 
 
@@ -60,7 +62,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		SliderObj = gameObject.GetComponentInChildren<Slider>();
 		valuetext = gameObject.transform.Find("ValueText").GetComponent<Text>();
 		StartButton = GameObject.Find("StartButton").GetComponent<Button>();
-		
+		swap = gameObject.GetComponentInChildren<Toggle>();
 	}
 	
 	// Update is called once per frame
@@ -69,20 +71,20 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		Stackblocks = FindObjectsOfType<StackBlock>();
         if (Options.captionText.text == "Move")
 		{
-            SliderObj.gameObject.SetActive(true);
-			valuetext.gameObject.SetActive(true);
+            SliderObj.transform.localScale = new Vector3(1.2f,1.5f);
+            valuetext.gameObject.transform.localScale = new Vector3(0.25f,0.4f);
             action = 0;
 		}
         if (Options.captionText.text == "Shoot")
         {
-			SliderObj.gameObject.SetActive(false);
-			valuetext.gameObject.SetActive(false);
-			action = 1;
+            SliderObj.transform.localScale = Vector3.zero;
+            valuetext.gameObject.transform.localScale = Vector3.zero;
+            action = 1;
         }
         if (Options.captionText.text == "Jump")
         {
-            SliderObj.gameObject.SetActive(false);
-			valuetext.gameObject.SetActive(false);
+            SliderObj.transform.localScale = Vector3.zero;
+            valuetext.gameObject.transform.localScale = Vector3.zero;
             action = 2;
         }
         if (above != null && !dragging)
@@ -109,8 +111,9 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		{
 			Debug.LogError("missing options");
 		}
+		
 		StartButton.Invoke("StartCode",0);
-        valuetext.text = ((int)SliderObj.value).ToString();
+        if (valuetext.IsActive()) valuetext.text = ((int)SliderObj.value).ToString();
 		
 		tick++;
 
@@ -132,11 +135,12 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	}
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		modifyingSlider = true;
+        if (SliderObj.IsActive())
+            modifyingSlider = true;
 	}
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		modifyingSlider = false;
+            modifyingSlider = false;
 	}
 	public void OnPointerDown(PointerEventData eventData)
     {
@@ -153,7 +157,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	}
 	public void OnDrag(PointerEventData eventData)
     {
-        
+		print("dragging me");
         if (!dragging) { return; }
         Vector3 mouseworld = Camera.main.ViewportToWorldPoint(Input.mousePosition);
         mouseworld.z = transform.position.z;
@@ -259,7 +263,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			//Code for executing walking
             nextaction = false;
             int variable = (int)SliderObj.value;
-			StartCoroutine(Travel(variable,false));
+			StartCoroutine(Travel(variable,swap));
 		}
 		else if (action == 1 && nextaction)
 		{
@@ -359,11 +363,12 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 				CurrentTravelDist += TravelSpeed * 0.01f;
 				yield return null;
 			}
-            
+			Player.GetComponent<SpriteRenderer>().flipX = direction;
 			//print("done moving: " + distance + " traveled: " + CurrentTravelDist);
         }
 		//print("completed travel");
 		yield return new WaitForSeconds(1f* distance);
+        Player.GetComponent<SpriteRenderer>().flipX = false;
         nextaction = true;
 		//Player.transform.position = new Vector3(Player.transform.position.y,Mathf.Round(Player.transform.position.x)+0.5f,0);
 		// attempt to fix float drift
@@ -375,7 +380,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		ppj.transform.position = Player.transform.position;
 		ppj.transform.parent = Player.transform;
 		ppj.transform.parent = null;
-		ppj.Initialize(8f,0.1f,false);
+		ppj.Initialize(8f,0.1f,swap);
 		nextaction=true;
 	}
 	public void Jump()
