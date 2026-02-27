@@ -41,7 +41,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 	bool hasbegun = false;
 	public Button StartButton;
 	Toggle swap;
-
+	public bool swapbool;
 	/// </summary>
 
 
@@ -114,7 +114,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		
 		StartButton.Invoke("StartCode",0);
         if (valuetext.IsActive()) valuetext.text = ((int)SliderObj.value).ToString();
-		
+		swapbool = swap.isOn;
 		tick++;
 
     }
@@ -263,7 +263,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			//Code for executing walking
             nextaction = false;
             int variable = (int)SliderObj.value;
-			StartCoroutine(Travel(variable,swap));
+			StartCoroutine(Travel(variable,swapbool));
 		}
 		else if (action == 1 && nextaction)
 		{
@@ -355,20 +355,20 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 			{
 				Player.transform.position -= new Vector3(TravelSpeed * 0.01f, 0,0);
 				CurrentTravelDist += TravelSpeed * 0.01f;
-				yield return null;
+				
 			}
 			else 
 			{
 				Player.transform.position += new Vector3(TravelSpeed * 0.01f, 0, 0);
 				CurrentTravelDist += TravelSpeed * 0.01f;
-				yield return null;
+				
 			}
 			Player.GetComponent<SpriteRenderer>().flipX = direction;
 			//print("done moving: " + distance + " traveled: " + CurrentTravelDist);
         }
 		//print("completed travel");
 		yield return new WaitForSeconds(1f* distance);
-        Player.GetComponent<SpriteRenderer>().flipX = false;
+        
         nextaction = true;
 		//Player.transform.position = new Vector3(Player.transform.position.y,Mathf.Round(Player.transform.position.x)+0.5f,0);
 		// attempt to fix float drift
@@ -380,7 +380,7 @@ public class StackBlock : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
 		ppj.transform.position = Player.transform.position;
 		ppj.transform.parent = Player.transform;
 		ppj.transform.parent = null;
-		ppj.Initialize(8f,0.1f,swap);
+		ppj.Initialize(8f,0.1f,swapbool);
 		nextaction=true;
 	}
 	public void Jump()
