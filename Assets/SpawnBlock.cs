@@ -25,4 +25,9 @@ public class SpawnBlock : MonoBehaviour {
 		}
 
 	}
+	public void InstantiateBlock()
+	{ 
+            Instantiate(block, vector3, Quaternion.Euler(0, 0, 0), canvas);
+        
+    }
 }
